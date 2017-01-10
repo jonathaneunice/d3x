@@ -1,7 +1,7 @@
-
-
-
-// const d3 = require('d3');
+/**
+ * parse - foundation attribute parsing functions
+ *         for d3x extended methods
+ */
 
 /**
  * Parse an element with CSS selector style id, class,
@@ -58,10 +58,6 @@ function isQuote(s) {
   return quoteChars.indexOf(s) >= 0;
 }
 
-// does not hanlde typical .attr(name, value) case
-// but does handle function => map, string => map
-// and plain map
-
 /**
  * Parse attribute strings.
  *
@@ -113,99 +109,6 @@ function attrParse (s) {
 }
 
 
-function attrx(...args) {
-  var selection = this;
-
-  if (args.length === 1) {
-    var map = args[0];
-    var mapType = typeof map;
-
-    if (mapType === 'string')
-      map = attrParse(map);
-
-    for (var name in map) {
-      selection.attr(name, map[name]);
-    }
-    return selection;
-  } else {
-    // more than one
-    // handle .attrx(name, static value)
-    // handle .attrx(name, function)
-    // handle .attrx(name1, value1, name2, value2, ...)
-    // handle .attrx(name1, function1, name2, function2, ...)
-
-    var rendered = {};
-
-    for (var i=0; i<args.length; i++) {
-      var ap = attrParse(args[i]);
-      Object.assign(rendered, ap);
-      var apkeys = Object.keys(ap);
-      var lastkey = apkeys[apkeys.length-1];
-      if (ap[lastkey] === undefined) {
-        rendered[lastkey] = args[i+1];
-        i += 1;
-      }
-    }
-
-
-  }
-}
-
-// on consideration, attrx and stylex should not require the
-// use of [] -
-
-// simpler take on styles than attributes
-// no functions supported yet; string or map asumed
-
-function stylex(map) {
-  var selection = this;
-  var mapType = typeof map;
-
-  if (mapType === 'string')
-    map = attrParse(map);
-  for (var name in map) {
-    selection.style(name, map[name]);
-  }
-  return selection;
-}
-
-function appendx(selector) {
-  var self = this;
-  var toAdd = eltParse(selector);
-  self = self.append(toAdd.element);
-  for (var key in toAdd) {
-    if (key === 'element') continue;
-    self.attr(key, toAdd[key]);
-  }
-  return self;
-}
-
-function insertx(selector) {
-  var self = this;
-  var toAdd = eltParse(selector);
-  self = self.insert(toAdd.element);
-  for (var key in toAdd) {
-    if (key === 'element') continue;
-    self.attr(key, toAdd[key]);
-  }
-  return self;
-}
-
-
-// link into D3 selection functions
-var methods = { appendx, insertx, attrx, stylex };
-var methodKeys = Object.keys(methods);
-
-methodKeys.forEach(k => d3.selection.prototype[k] = methods[k]);
-// Object.assign(d3.selection.prototype, methods);
-
-// for v3 also extend enter selection
-if (d3.version.charAt(0) === '3') {
-  methodKeys.forEach(k => d3.selection.enter.prototype[k] = methods[k]);
-  // Object.assign(d3.selection.enter.prototype, methods);
-}
-
-
 if (typeof module === 'undefined')
   module = {};
 
@@ -216,12 +119,3 @@ exports = module.exports = {
   eltParse,
   attrParse
 };
-
-
-// globalize these functions
-if (typeof window !== "undefined") {
-  global = window;
-}
-for (p in exports) {
-  global[p] = exports[p];
-}
