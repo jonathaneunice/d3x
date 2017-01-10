@@ -1,6 +1,17 @@
 
 # d3x - d3.js, extended
 
+### Example
+
+```javascript
+var body = d3.select('body');
+
+var svg = body.appendx('svg[width=200 height=200]');
+
+svg.append('circle')
+   .attrx('cx=40 cy=40 r=6 fill=blue');
+```
+
 ### Background and Motivation
 
 [d3.js](https://d3js.org) is an awesome content creation pipeline for HTML and
