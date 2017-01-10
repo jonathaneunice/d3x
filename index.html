@@ -1,0 +1,28 @@
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="d3x.js"></script>
+
+<body>
+
+
+<script>
+
+var body = d3.select('body');
+var col = 'blue';
+
+body
+  .append('div')
+  .attr('class', 'one')
+  .style('font-size', '13pt')
+  .style('color', col)
+  .text('one');
+
+
+body.appendx('div.two')
+    .stylex(`font-size: 13pt;
+             color: ${col}`)
+    .text('two');
+
+</script>
+</body>
+
