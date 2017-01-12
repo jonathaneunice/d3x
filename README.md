@@ -1,6 +1,11 @@
 
 # d3x - d3.js, extended
 
+d3x is an experimental extension package to make d3
+programming quicker and more straightfoward.
+
+It is very early days. Buyer beware!
+
 ### Example
 
 ```javascript
@@ -12,7 +17,7 @@ svg.append('circle')
    .attrx('cx=40 cy=40 r=6 fill=blue');
 
 svg.appendx('circle')
-   .attrx({cx: 80, cy: 40, r: 6, fill: 'green'});
+   .attrs({cx: 80, cy: 40, r: 6, fill: 'green'});
 
 svg.appendx('line')
    .attrx('x1: 40 y1:40 x2:80 y2:40 stroke: purple')
@@ -29,18 +34,20 @@ SVG, but its semantic level is uneven. One minute it provides amazing high-level
 constructs that make manipulating data then drawing and animating content *so*
 much easier. Then the next moment, it requires you laboriously specify content
 attributes one by single one. And while you can do great things with HTML and
-SVG, they are natively often rather low-level beasts.
+SVG, they are themselves natively rather low-level beasts.
 
 Partially as a result, d3 programs tend to be rather long, even when creating
 fairly simple visual objects. Over time, d3 could "fill in gaps" and increase
-the semantic level at which d3 developers work. While d3 is improving, it isn't
-always up-leveling. d3 v4, for instance, removes the ability to set multiple
-attributes or styles at a time that was present in v3. That ability has been
-moved instead to a separate module, making it arguably less readily rather than
-more readily available.
+the semantic level at which developers work. But that doesn't always seem to be
+the case. D3 is improving, but it isn't always up-leveling. The most recent
+version 4, for instance, removes the ability to conveniently set multiple
+attributes or styles at a time that was present in v3. That ability isn't
+strictly gone, but it's been moved instead to a separate module, making it less
+readily available.
 
-d3x's goal is therefore to fill in gaps. When d3 or SVG has a long,
-laborious, or low-level approach, d3x aims to provide pithier,
+d3x's goal is therefore to fill in gaps, both in d3 and the underlying HTML
+and SVG facilitates. When d3 or SVG has a long,
+laborious, or low-level approach, d3x hopes to provide pithier,
 higher-level mechanisms as extensions.
 
 d3x's first target is
@@ -58,7 +65,7 @@ svg.append('circle')
    .attr('stroke-width', 2);
 ```
 
-d3x shortens this, e.g. to:
+d3x enables this to be shortened, e.g. to:
 
 ```javascript
 svg.appendx('circle.focal-point')
@@ -70,7 +77,7 @@ svg.appendx('circle.focal-point')
 That's 4 lines instead of 9. No excess punctuation or data framing is required,
 because it can be reliably inferred. You can quote the attribute values,
 however, if you wish. That way, if you see attributes in raw SVG or HTML you
-want in your program, you can simpy copy and paste. There's no need to rewrite
+want in your program, you can simply copy and paste. There's no need to rewrite
 XML-style `fill="blue"` or even CSS-style `border: thin solid red` yet you need
 it in JavaScript literals for `.attr('fill', 'blue')` or `.style('border', 'thin
 solid red')`. That kind of reformatting isn't hard, *per se*, but it takes time
@@ -80,9 +87,48 @@ is, see if it produces the effect you like, and move on.
 d3x won't change any existing d3 behavior. For compatibility,
 it will only extend and add. If you want `.append` with the
 expanded functionality, use `.appendx`. Similarly for `.insertx`,
-`.attrx`, and `.stylex`.
+`.attrx`, and `.stylex`. It does use the same `.attrs` and `.styles`
+method names used by [d3-selection-multi](https://github.com/d3/d3-selection-multi),
+for which it provides a superset of the native functions.
 
-### The Rules
+### Multiple Setting
+
+There are several routes to setting multiple attribute values
+at a time. The string representations modeled above are very
+convenient for copying and pasting content directly from existing
+SVG or CSS right into your program. But, they come with some (modest)
+parsing overhead. They also require the use of newfangled ES2015
+template strings if you need to introduce live values into the parsed
+content. So there is another route: `.attrs` and `.styles` methods.
+These accept either JavaScript objects or series of key-value pairs.
+They do no parsing of the keys or values. The above value setting could
+be alternately accomplished with:
+
+```javascript
+svg.appendx('circle.focal-point')
+   .attrs({ cx: 40, cy: 40, r: 20 })
+   .attrs({ fill: 'blue', 'fill-opacity': 0.5 })
+   .attrs({ stroke: 'gray', 'stroke-width': 2 });
+```
+
+This has the benefit of piggybacking JS object literals.
+There is a little bit more quoting and syntax required, but
+at runtime is very efficient.
+
+Or there is the mutli-setter format:
+
+```javascript
+svg.appendx('circle.focal-point')
+   .attrs('cx', 40, 'cy', 40, 'r', 20)
+   .attrs('fill', 'blue', 'fill-opacity', 0.5)
+   .attrs('stroke', 'gray', 'stroke-width', 2);
+```
+
+This has the virtue of being closest to the original `.attr`
+format, and the easiest to quickly adapt code to if what you
+want to do is to use vertical program space more effectively.
+
+### Parsing Rules
 
 There are two overlapping but distinct
 sets of parsing rules: One for adding elements (e.g. with
@@ -147,5 +193,3 @@ will generally shave only 5-10% off the source code length. Other
 simplifications are needed to markedly improve a d3 program's
 operation. Over time d3x
 features for managing geometry, text, and other aspects will be added.
-
-
