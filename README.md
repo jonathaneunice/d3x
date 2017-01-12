@@ -160,6 +160,24 @@ completeness, it is recommended that element creation calls define only element,
 id, and class values, leaving other attributes for subsequent attribute-setting
 calls.
 
+### Why So Many Ways?
+
+d3x provides a large number of different approaches. Why so many?
+
+1. Because configuration data may already be in a variety of formats, from
+   existing HTML/SVG or CSS definitions, or JavaScript objects, or JS method
+   calls. The variety and diversity of inputs is a huge driver.
+
+2. To accommodate a range of data liveness, from static, to dynamic, to dynamic per
+   item. Different forms suit the different levels of dynamisms better or worse.
+
+3. Different use cases.
+
+4. Experimentation. It's not entirely clear what the "best" approach(es) will be,
+   so we provide multiple avenues. It's likely that the `.attrs` and `.styles`
+   approaches will be recommended for many uses, with `.attrx` and `.stylex`
+   recommended largely for static programs and bringing data in from other sources.
+
 ### Testing and Reliability
 
 The interpretation rules here are very inclusive: A superset of CSS selector and
