@@ -166,8 +166,10 @@ if (d3.version.charAt(0) === '3') {
   // Object.assign(d3.selection.enter.prototype, methods);
 }
 
+var version = '0.0.2';
+
 if (typeof module === 'undefined')
   module = {};
 
 // most exports are bound into d3, not used on their own
-exports = module.exports = {};
+exports = module.exports = { version };
