@@ -50,6 +50,35 @@ function attrx(...args) {
 
 
 /**
+ * Superset of d3's .attrs() but without extended string
+ * parsing. Supports
+ *
+ * .attrs('name1', value1, 'name2', value2, ...)
+ * .attrs(map1, ...)
+ *
+ * Name-value pairs and maps may be interspersed.
+ */
+function attrs(...args) {
+  var selection = this;
+
+  var cursor = 0;
+  while (cursor < args.length) {
+    var arg = args[cursor];
+    if (typeof arg === 'string') {
+      var value = args[++cursor];
+      selection.attr(arg, value);
+    } else {
+      for (var name in arg) {
+        selection.attr(name, arg[name]);
+      }
+    }
+    cursor++;
+  }
+  return selection;
+}
+
+
+/**
  * Extended style attribute setting. Combines d3's
  * .style() and .styles() with extended string
  * parsing.
@@ -68,6 +97,36 @@ function stylex(map) {
   // FIXME: missing functional support
   // FIXME: missing multi-arg support
 
+}
+
+
+
+/**
+ * Superset of d3's .styles() but without extended string
+ * parsing. Supports
+ *
+ * .styles('name1', value1, 'name2', value2, ...)
+ * .styles(map1, ...)
+ *
+ * Name-value pairs and maps may be interspersed.
+ */
+function styles(...args) {
+  var selection = this;
+
+  var cursor = 0;
+  while (cursor < args.length) {
+    var arg = args[cursor];
+    if (typeof arg === 'string') {
+      var value = args[++cursor];
+      selection.style(arg, value);
+    } else {
+      for (var name in arg) {
+        selection.style(name, arg[name]);
+      }
+    }
+    cursor++;
+  }
+  return selection;
 }
 
 
@@ -95,7 +154,7 @@ function insertx(selector) {
 
 
 // link into D3 selection functions
-var methods = { appendx, insertx, attrx, stylex };
+var methods = { appendx, insertx, attrx, stylex, attrs, styles};
 var methodKeys = Object.keys(methods);
 
 methodKeys.forEach(k => d3.selection.prototype[k] = methods[k]);

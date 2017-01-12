@@ -2,7 +2,7 @@
   "name": "d3x",
   "version": "0.0.1",
   "description": "d3.js extended",
-  "main": "d3x.js",
+  "main": "src/d3x.js",
   "directories": {
     "test": "test"
   },

@@ -10,7 +10,17 @@ var svg = body.appendx('svg[width=200 height=200]');
 
 svg.append('circle')
    .attrx('cx=40 cy=40 r=6 fill=blue');
+
+svg.appendx('circle')
+   .attrx({cx: 80, cy: 40, r: 6, fill: 'green'});
+
+svg.appendx('line')
+   .attrx('x1: 40 y1:40 x2:80 y2:40 stroke: purple')
+   .lower();
 ```
+
+Combined with ES2015 [template strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals),
+specifying d3 objects just got a whole lot easier.
 
 ### Background and Motivation
 
@@ -22,21 +32,19 @@ attributes one by single one. And while you can do great things with HTML and
 SVG, they are natively often rather low-level beasts.
 
 Partially as a result, d3 programs tend to be rather long, even when creating
-fairly simple visual objects. Over time, d3 could "fill in gaps" and
-increase the semantic level at which d3 developers work. While d3 is improving,
-it isn't always up-leveling.
-d3 v4, for instance, removes the ability to
-set multiple attributes or styles at a time that was present in v3.
-That ability has been moved instead to a
-separate module, making it arguably less readily rather than more readily
-available.
+fairly simple visual objects. Over time, d3 could "fill in gaps" and increase
+the semantic level at which d3 developers work. While d3 is improving, it isn't
+always up-leveling. d3 v4, for instance, removes the ability to set multiple
+attributes or styles at a time that was present in v3. That ability has been
+moved instead to a separate module, making it arguably less readily rather than
+more readily available.
 
 d3x's goal is therefore to fill in gaps. When d3 or SVG has a long,
 laborious, or low-level approach, d3x aims to provide pithier,
 higher-level mechanisms as extensions.
 
 d3x's first target is
-attribute setting. E.g. istead of:
+attribute setting. E.g. instead of:
 
 ```javascript
 svg.append('circle')
@@ -93,20 +101,18 @@ multiple class names. The element created would be
 This is inspired by and conforms with the CSS selector
 syntax widely used in JavaScript.
 
-It is additionally possible to set other attribute values by
-enclosing a `[name=value]` assignment in brackets.
-The value can be quoted (either singly or doubly), but
-need not be unless you wish to include space characters.
-To specify multiple attributes, this form can be repeated
-e.g. `[name=value][other=another]` just as in CSS selectors.
+It is additionally possible to set other attribute values by enclosing a
+`[name=value]` assignment in brackets. The value can be quoted (either singly or
+doubly), but need not be unless you wish to include space characters. To specify
+multiple attributes, this form can be repeated e.g.
+`[name=value][other=another]` just as in CSS selectors.
 
-However the multiple bracketing is unnecessary, as either spaces
-or semicolons can separate items (as in HTML and XML, or as in
-CSS definitions, respectively). So `[name=value other=another]`
-works. While we provide this form for completeness, it is
-recommended that element creation calls define only element,
-id, and class values, leaving other attributes for subsequent
-attribute-setting calls.
+However the multiple bracketing is unnecessary, as either spaces or semicolons
+can separate items (as in HTML and XML, or as in CSS definitions, respectively).
+So `[name=value other=another]` works. While we provide this form for
+completeness, it is recommended that element creation calls define only element,
+id, and class values, leaving other attributes for subsequent attribute-setting
+calls.
 
 ### Testing and Reliability
 
@@ -126,10 +132,20 @@ work than d3's native methods. They will take at least slightly longer to run.
 Is that extra overhead important? In many cases, no. Not at all.
 
 Extended parsing may take longer, but the times will be measured in microseconds
-either way. Attribute parising will often not be on any performance critical
+either way. Attribute parsing will often not be on any performance critical
 path. In odd cases where it is, feel free to start with extended d3x style
 definitions, then replace those with the native setting methods over time as
 your program moves through the optimization phase. While we believe extended
 parsing suitably performant for most visualization apps, we're perfectly happy
 if you only use the extended forms as an accelerator for initial development and
 prototyping.
+
+### Other Functions
+
+Shortening attribute setting neatens a program, but
+will generally shave only 5-10% off the source code length. Other
+simplifications are needed to markedly improve a d3 program's
+operation. Over time d3x
+features for managing geometry, text, and other aspects will be added.
+
+
