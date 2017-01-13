@@ -2,9 +2,10 @@
 # d3x - d3.js, extended
 
 d3x is an experimental extension package to make d3
-programming quicker and more straightfoward.
+programming quicker and more straightforward.
 
-It is very early days. Buyer beware!
+It is very early days. The module, tests, design, and
+docs are just coming together. Buyer beware!
 
 ### Example
 
